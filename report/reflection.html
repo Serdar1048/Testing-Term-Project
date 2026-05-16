@@ -190,7 +190,8 @@
         <h3>Task 2: Structural Testing & Code Coverage (20 tests)</h3>
         <p>Developed branch coverage tests for <code>ShoppingCart</code>. Systematically tested every branch in methods
             like <code>addItem()</code>, <code>removeItem()</code>, <code>updateQuantity()</code>, and
-            <code>applyDiscount()</code>. Achieved 80%+ branch coverage through methodical code inspection.</p>
+            <code>applyDiscount()</code>. Achieved 80%+ branch coverage through methodical code inspection.
+        </p>
         <p><strong>Key Learning:</strong> Structural testing requires deep code understanding. Every if/else, loop
             condition, and method call must have at least one test case. JaCoCo reports provide objective coverage
             metrics.</p>
@@ -354,6 +355,22 @@
             </tr>
         </table>
 
+        <h3>Coverage Breakdown by Class</h3>
+        <p>The JaCoCo coverage report reveals detailed metrics for each production class:</p>
+        <ul>
+            <li><strong>PriceCalculator:</strong> 93% instruction / 91% branch coverage — Highest coverage rate due to
+                straightforward logic and comprehensive specification + property tests.</li>
+            <li><strong>ShoppingCart:</strong> 85% instruction / 84% branch coverage — Strong structural test coverage
+                with all major branches tested.</li>
+            <li><strong>OrderProcessor:</strong> 84% instruction / 83% branch coverage — Good mock-based coverage;
+                validates critical control flow paths (inventory → payment → order).</li>
+            <li><strong>Product, CartItem, Order:</strong> 41-46% coverage — Lower coverage expected for immutable data
+                classes; primarily tested indirectly through higher-level classes.</li>
+        </ul>
+        <p>The overall metrics (72% instruction, 77% branch coverage) indicate <strong>strong test quality</strong> for
+            core business logic while acknowledging that some data accessor methods are not directly tested (acceptable
+            trade-off for simple immutable classes).</p>
+
         <hr>
 
         <h2>Key Lessons Learned</h2>
@@ -369,12 +386,14 @@
 
         <h3>2. Floating-Point Precision</h3>
         <p>Tests revealed that <code>99.99 * 0.67 * 1.07 = 71.682831</code>, not 72.0. Solution: Use round numbers or
-            <code>assertThat(value).isCloseTo(expected, offset(0.01))</code>.</p>
+            <code>assertThat(value).isCloseTo(expected, offset(0.01))</code>.
+        </p>
 
         <h3>3. Property-Based Testing Assumptions</h3>
         <p>The <code>cartCommutativityProperty</code> initially failed because the generator created products with
             identical IDs but different prices. Solution: Add
-            <code>Assume.that(!product1.getId().equals(product2.getId()))</code> to filter meaningless cases.</p>
+            <code>Assume.that(!product1.getId().equals(product2.getId()))</code> to filter meaningless cases.
+        </p>
 
         <h3>4. Design by Contract Trade-offs</h3>
         <p>Assertions in production code catch bugs early but:</p>
