@@ -1,42 +1,14 @@
 package shopeasy;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.*;
-
-/**
- * Task 3 – Design by Contract (Chapter 4)
- *
- * <p>This task has two parts:
- *
- * <h3>Part A – Add contracts to production code</h3>
- * Open {@link ShoppingCart} and {@link PriceCalculator} and add {@code assert}
- * statements for the pre-conditions and post-conditions described in their Javadoc.
- * Note: assertions are enabled via {@code -ea} in Maven Surefire (already configured
- * in {@code pom.xml}).
- *
- * <p>Contracts to implement:
- * <ul>
- *   <li><b>ShoppingCart.addItem</b>: pre — {@code product != null}, {@code quantity > 0};
- *       post — {@code itemCount()} increased or product quantity updated.</li>
- *   <li><b>ShoppingCart.applyDiscount</b>: pre — {@code 0 <= discountRate <= 100};
- *       post — result &lt;= {@code total()} when {@code discountRate > 0}.</li>
- *   <li><b>PriceCalculator.calculate</b>: pre — {@code basePrice >= 0},
- *       {@code 0 <= discountRate <= 100}, {@code 0 <= taxRate <= 100};
- *       post — result {@code >= 0}.</li>
- *   <li><b>ShoppingCart invariant</b>: {@code total() >= 0} after any operation.</li>
- * </ul>
- *
- * <h3>Part B – Write contract tests</h3>
- * Write tests below that:
- * <ol>
- *   <li>Verify contracts hold for valid inputs (positive tests).</li>
- *   <li>Verify contracts are violated ({@code AssertionError}) for invalid inputs (negative tests).</li>
- * </ol>
- *
- * <p>Use {@code assertThatThrownBy(...).isInstanceOf(AssertionError.class)} to test violations.
- */
+@DisplayName("Design by Contract Tests")
 class ContractTest {
 
     private ShoppingCart cart;
@@ -50,23 +22,116 @@ class ContractTest {
         product    = new Product("P001", "Widget", 10.0, 50);
     }
 
-    // -----------------------------------------------------------------------
-    // TODO: Write your contract tests below.
-    //
-    // EXAMPLE — pre-condition violation (fill in the correct assertion):
-    //
-    // @Test
-    // void addItem_nullProduct_shouldViolatePreCondition() {
-    //     assertThatThrownBy(() -> cart.addItem(null, 1))
-    //             .isInstanceOf(AssertionError.class);
-    // }
-    //
-    // EXAMPLE — pre-condition holds (valid input):
-    //
-    // @Test
-    // void addItem_validInput_shouldNotThrow() {
-    //     assertThatCode(() -> cart.addItem(product, 3)).doesNotThrowAnyException();
-    // }
-    // -----------------------------------------------------------------------
+    @Test
+    @DisplayName("ShoppingCart.addItem - null product violates pre-condition")
+    void addItemNullProductThrowsAssertionError() {
+        assertThrows(AssertionError.class, () -> cart.addItem(null, 1));
+    }
 
+    @Test
+    @DisplayName("ShoppingCart.addItem - negative quantity violates pre-condition")
+    void addItemNegativeQuantityThrowsAssertionError() {
+        assertThrows(AssertionError.class, () -> cart.addItem(product, -5));
+    }
+
+    @Test
+    @DisplayName("ShoppingCart.addItem - zero quantity violates pre-condition")
+    void addItemZeroQuantityThrowsAssertionError() {
+        assertThrows(AssertionError.class, () -> cart.addItem(product, 0));
+    }
+
+    @Test
+    @DisplayName("ShoppingCart.addItem - valid inputs satisfy contract")
+    void addItemValidInputsOk() {
+        assertDoesNotThrow(() -> cart.addItem(product, 5));
+        assertEquals(1, cart.itemCount());
+    }
+
+    @Test
+    @DisplayName("ShoppingCart.addItem - post-condition satisfied after add")
+    void addItemPostConditionSatisfied() {
+        cart.addItem(product, 3);
+        assertTrue(cart.getItems().stream()
+            .anyMatch(i -> i.getProduct().getId().equals("P001")));
+    }
+
+    @Test
+    @DisplayName("ShoppingCart.applyDiscount - negative discount violates pre-condition")
+    void applyDiscountNegativeThrowsAssertionError() {
+        assertThrows(AssertionError.class, () -> cart.applyDiscount(-10));
+    }
+
+    @Test
+    @DisplayName("ShoppingCart.applyDiscount - discount > 100 violates pre-condition")
+    void applyDiscountAbove100ThrowsAssertionError() {
+        assertThrows(AssertionError.class, () -> cart.applyDiscount(150));
+    }
+
+    @Test
+    @DisplayName("ShoppingCart.applyDiscount - valid discount satisfies contract")
+    void applyDiscountValidRateOk() {
+        cart.addItem(product, 10);
+        assertDoesNotThrow(() -> cart.applyDiscount(20));
+    }
+
+    @Test
+    @DisplayName("ShoppingCart.applyDiscount - post-condition: result <= total")
+    void applyDiscountPostConditionSatisfied() {
+        cart.addItem(product, 10);
+        double result = cart.applyDiscount(25);
+        assertTrue(result <= cart.total(), "Discounted result must be <= total");
+    }
+
+    @Test
+    @DisplayName("PriceCalculator.calculate - negative basePrice violates pre-condition")
+    void calculateNegativeBasePriceThrowsAssertionError() {
+        assertThrows(AssertionError.class, () -> calculator.calculate(-50, 10, 5));
+    }
+
+    @Test
+    @DisplayName("PriceCalculator.calculate - negative discount violates pre-condition")
+    void calculateNegativeDiscountThrowsAssertionError() {
+        assertThrows(AssertionError.class, () -> calculator.calculate(100, -10, 5));
+    }
+
+    @Test
+    @DisplayName("PriceCalculator.calculate - discount > 100 violates pre-condition")
+    void calculateDiscountAbove100ThrowsAssertionError() {
+        assertThrows(AssertionError.class, () -> calculator.calculate(100, 150, 5));
+    }
+
+    @Test
+    @DisplayName("PriceCalculator.calculate - negative tax violates pre-condition")
+    void calculateNegativeTaxThrowsAssertionError() {
+        assertThrows(AssertionError.class, () -> calculator.calculate(100, 10, -5));
+    }
+
+    @Test
+    @DisplayName("PriceCalculator.calculate - tax > 100 violates pre-condition")
+    void calculateTaxAbove100ThrowsAssertionError() {
+        assertThrows(AssertionError.class, () -> calculator.calculate(100, 10, 150));
+    }
+
+    @Test
+    @DisplayName("PriceCalculator.calculate - valid inputs satisfy contract")
+    void calculateValidInputsOk() {
+        assertDoesNotThrow(() -> calculator.calculate(100, 20, 15));
+    }
+
+    @Test
+    @DisplayName("PriceCalculator.calculate - post-condition: result >= 0")
+    void calculatePostConditionSatisfied() {
+        double result = calculator.calculate(100, 50, 50);
+        assertTrue(result >= 0, "Result must be >= 0");
+    }
+
+    @Test
+    @DisplayName("Invariant: ShoppingCart total always >= 0")
+    void invariantCartTotalAlwaysNonNegative() {
+        assertTrue(cart.total() >= 0);
+        cart.addItem(product, 5);
+        assertTrue(cart.total() >= 0);
+        cart.applyDiscount(100);
+        assertTrue(cart.total() >= 0);
+    }
 }

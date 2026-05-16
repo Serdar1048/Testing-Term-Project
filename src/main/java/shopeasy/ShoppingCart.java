@@ -32,17 +32,18 @@ public class ShoppingCart {
      * @param quantity number of units to add (must be > 0)
      */
     public void addItem(Product product, int quantity) {
-        // TODO (Task 3): add assert pre-condition here
+        assert product != null : "product must not be null";
+        assert quantity > 0 : "quantity must be > 0";
 
         for (CartItem item : items) {
             if (item.getProduct().getId().equals(product.getId())) {
                 item.setQuantity(item.getQuantity() + quantity);
-                // TODO (Task 3): add assert post-condition here
+                assert items.stream().anyMatch(i -> i.getProduct().getId().equals(product.getId())) : "product must be in cart";
                 return;
             }
         }
         items.add(new CartItem(product, quantity));
-        // TODO (Task 3): add assert post-condition here
+        assert items.stream().anyMatch(i -> i.getProduct().getId().equals(product.getId())) : "product must be in cart";
     }
 
     /**
@@ -86,12 +87,12 @@ public class ShoppingCart {
      * @return the total after applying the discount
      */
     public double applyDiscount(double discountRate) {
-        // TODO (Task 3): add assert pre-condition here
+        assert discountRate >= 0 && discountRate <= 100 : "discountRate must be in [0, 100]";
 
         double rawTotal = total();
         double discounted = rawTotal - (rawTotal * discountRate / 100);
 
-        // TODO (Task 3): add assert post-condition here
+        assert discounted <= rawTotal : "discounted must be <= rawTotal when discountRate > 0";
         return discounted;
     }
 

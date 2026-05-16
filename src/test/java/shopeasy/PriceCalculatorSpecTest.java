@@ -1,6 +1,5 @@
 package shopeasy;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
@@ -59,18 +58,5 @@ class PriceCalculatorSpecTest {
         assertTrue(calculator.calculate(0, 0, 0) >= 0);
         assertTrue(calculator.calculate(100, 100, 100) >= 0);
         assertTrue(calculator.calculate(1000, 50, 50) >= 0);
-    }
-
-    @ParameterizedTest
-    @CsvSource({
-        "-1.0,    10.0,   10.0",
-        "100.0,  -10.0,   10.0",
-        "100.0,  110.0,   10.0",
-        "100.0,   10.0,  -10.0",
-        "100.0,   10.0,  110.0"
-    })
-    @DisplayName("Invalid inputs should be caught by assertions (Task 3)")
-    void testInvalidInputsPreConditions(double basePrice, double discountRate, double taxRate) {
-        assertDoesNotThrow(() -> calculator.calculate(basePrice, discountRate, taxRate));
     }
 }
