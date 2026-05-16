@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopEasy Reflection Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 50px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #1a5490;
+            border-bottom: 3px solid #1a5490;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            font-size: 32px;
+        }
+
+        h2 {
+            color: #2a7fb8;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            font-size: 24px;
+            border-left: 5px solid #2a7fb8;
+            padding-left: 15px;
+        }
+
+        h3 {
+            color: #3a9fc8;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background-color: #1a5490;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        td {
+            border-bottom: 1px solid #ddd;
+            padding: 12px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        code {
+            background-color: #f5f5f5;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border-left: 4px solid #1a5490;
+        }
+
+        blockquote {
+            border-left: 4px solid #2a7fb8;
+            padding: 15px;
+            margin: 15px 0;
+            background-color: #f0f8ff;
+            font-style: italic;
+            color: #555;
+        }
+
+        li {
+            margin-left: 30px;
+            margin-bottom: 8px;
+        }
+
+        strong {
+            color: #1a5490;
+            font-weight: bold;
+        }
+
+        .section {
+            page-break-inside: avoid;
+            margin-bottom: 30px;
+        }
+
+        .stats-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .highlight {
+            background-color: #ffffcc;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .container {
+                box-shadow: none;
+                padding: 0;
+            }
+
+            h1,
+            h2 {
+                page-break-after: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <h1>Reflection Report: ShopEasy Testing Suite</h1>
+
+        <h2>Executive Summary</h2>
+        <p>This report reflects on the comprehensive testing suite developed for the ShopEasy library across five
+            testing chapters (Tasks 1-5). The project progressed from basic specification testing to advanced mock-based
+            testing, accumulating <strong>61 passing tests</strong> with 72% instruction coverage and 77% branch
+            coverage.</p>
+
+        <hr>
+
+        <h2>Task Overview</h2>
+
+        <h3>Task 1: Specification-Based Testing (13 tests)</h3>
+        <p>Tested <code>PriceCalculator.calculate()</code> using partition and boundary value analysis. Covered
+            partition classes: no discount/tax, partial discount, full discount, and zero values. Discovered the
+            importance of floating-point precision and exact value selection.</p>
+        <p><strong>Key Learning:</strong> Specification tests verify <em>happy paths</em> and <em>normal cases</em>;
+            they require careful partition identification to avoid redundant test cases.</p>
+
+        <h3>Task 2: Structural Testing & Code Coverage (20 tests)</h3>
+        <p>Developed branch coverage tests for <code>ShoppingCart</code>. Systematically tested every branch in methods
+            like <code>addItem()</code>, <code>removeItem()</code>, <code>updateQuantity()</code>, and
+            <code>applyDiscount()</code>. Achieved 80%+ branch coverage through methodical code inspection.</p>
+        <p><strong>Key Learning:</strong> Structural testing requires deep code understanding. Every if/else, loop
+            condition, and method call must have at least one test case. JaCoCo reports provide objective coverage
+            metrics.</p>
+
+        <h3>Task 3: Design by Contract (17 tests)</h3>
+        <p>Embedded assertion statements in production code (<code>PriceCalculator</code>, <code>ShoppingCart</code>) to
+            enforce pre-conditions, post-conditions, and invariants. Wrote tests to verify that contract violations
+            correctly throw <code>AssertionError</code>.</p>
+        <p><strong>Key Learning:</strong> Contracts serve as executable specifications. They catch bugs early but
+            require careful design to avoid violating the Liskov Substitution Principle in subclasses.</p>
+
+        <h3>Task 4: Property-Based Testing (3 properties × 1000 tests = 3000 tests)</h3>
+        <p>Used jqwik to define universal properties:</p>
+        <ul>
+            <li><strong>Identity Property:</strong> 0% discount + 0% tax returns exact basePrice</li>
+            <li><strong>Monotonicity Property:</strong> Higher discount never increases final price</li>
+            <li><strong>Commutativity Property:</strong> Addition order does not affect cart totals</li>
+        </ul>
+        <p><strong>Key Learning:</strong> Property-based testing catches bugs that traditional tests miss, especially
+            off-by-one errors and order-dependent mutations.</p>
+
+        <h3>Task 5: Mocks & Stubs (8 test scenarios)</h3>
+        <p>Mocked <code>InventoryService</code> and <code>PaymentGateway</code> to test <code>OrderProcessor</code> in
+            isolation. Verified critical behavior: <strong>no payment is attempted if inventory fails</strong>.</p>
+        <p><strong>Key Learning:</strong> Mocking enables isolation testing and verification of external service
+            interactions without actually calling them.</p>
+
+        <hr>
+
+        <h2>Reflection Questions</h2>
+
+        <h3>1. What does mocking allow you to test that you could not test otherwise?</h3>
+
+        <p><strong>Answer:</strong> Mocking enables <strong>isolation testing of external service dependencies</strong>.
+            Without mocks, testing <code>OrderProcessor.process()</code> would require:</p>
+        <ul>
+            <li>A real database for inventory checks</li>
+            <li>A real payment service (costing real money)</li>
+            <li>Network latency and potential service downtime</li>
+            <li>Difficulty reproducing specific failure scenarios</li>
+        </ul>
+
+        <p>With Mockito mocks, we can:</p>
+        <ul>
+            <li><strong>Simulate failures:</strong> <code>when(paymentGateway.charge(...)).thenReturn(false)</code></li>
+            <li><strong>Verify interactions:</strong> <code>verify(paymentGateway, never()).charge(...)</code> asserts
+                no payment on inventory failure</li>
+            <li><strong>Control timing:</strong> No network delays</li>
+            <li><strong>Test edge cases:</strong> Impossible to trigger on real services</li>
+            <li><strong>Run fast:</strong> Tests complete in milliseconds instead of seconds</li>
+        </ul>
+
+        <div class="highlight">
+            <strong>Critical Discovery:</strong> The test "Inventory Failure → charge() never called" is
+            <em>impossible</em> to verify without mocks. Only isolation via mocks provides this confidence.
+        </div>
+
+        <h3>2. What does mocking prevent you from testing? When is mocking a bad idea?</h3>
+
+        <p><strong>Answer:</strong> Mocking creates a <strong>false sense of security</strong> because:</p>
+
+        <ol>
+            <li><strong>No Integration Testing:</strong> Mocks don't validate that interfaces actually match real
+                implementations.</li>
+            <li><strong>Network/Protocol Issues:</strong> Mocks bypass serialization, network timeouts, and
+                authentication failures.</li>
+            <li><strong>Concurrency Bugs:</strong> Mocking single-threaded interactions masks race conditions.</li>
+            <li><strong>Performance Regression:</strong> Mocks don't reveal if <code>OrderProcessor</code> makes 1
+                payment call or 100.</li>
+            <li><strong>External API Changes:</strong> If <code>PaymentGateway</code> is updated but mocks aren't, tests
+                pass but code breaks.</li>
+        </ol>
+
+        <p><strong>When Mocking is a Bad Idea:</strong></p>
+        <ul>
+            <li><strong>Over-Mocking:</strong> Mocking <em>everything</em> creates brittle tests that don't catch real
+                bugs.</li>
+            <li><strong>Mock Verification Instead of Behavior:</strong> <code>verify(paymentGateway).charge(...)</code>
+                verifies the method was called, not that the charge succeeded.</li>
+            <li><strong>Mocking Stable Code:</strong> Mocking your own stable classes is unnecessary.</li>
+            <li><strong>Replacing End-to-End Tests:</strong> Unit tests with mocks cannot replace integration tests.
+            </li>
+        </ul>
+
+        <p><strong>Solution:</strong> Use mocks <strong>strategically</strong>:</p>
+        <ul>
+            <li>Mock external services (PaymentGateway, InventoryService)</li>
+            <li>Test real implementations for stable code</li>
+            <li>Supplement with integration tests for critical paths</li>
+        </ul>
+
+        <hr>
+
+        <h2>Technical Achievements</h2>
+
+        <h3>Test Framework Mastery</h3>
+        <table>
+            <tr>
+                <th>Framework</th>
+                <th>Purpose</th>
+                <th>Achievement</th>
+            </tr>
+            <tr>
+                <td><strong>JUnit 5</strong></td>
+                <td>Test execution and assertions</td>
+                <td>61 tests organized in 5 classes</td>
+            </tr>
+            <tr>
+                <td><strong>AssertJ</strong></td>
+                <td>Fluent assertions</td>
+                <td>50+ assertions used</td>
+            </tr>
+            <tr>
+                <td><strong>Mockito</strong></td>
+                <td>Mocking framework</td>
+                <td>@Mock, @InjectMocks, when(), verify()</td>
+            </tr>
+            <tr>
+                <td><strong>jqwik</strong></td>
+                <td>Property-based testing</td>
+                <td>3000 edge cases generated</td>
+            </tr>
+            <tr>
+                <td><strong>JaCoCo</strong></td>
+                <td>Code coverage reporting</td>
+                <td>72% instruction, 77% branch</td>
+            </tr>
+        </table>
+
+        <h3>Code Quality Metrics</h3>
+        <table>
+            <tr>
+                <th>Class</th>
+                <th>Instruction Coverage</th>
+                <th>Branch Coverage</th>
+                <th>Tests Generated</th>
+            </tr>
+            <tr>
+                <td>PriceCalculator</td>
+                <td>93%</td>
+                <td>91%</td>
+                <td>13 + 1000</td>
+            </tr>
+            <tr>
+                <td>ShoppingCart</td>
+                <td>85%</td>
+                <td>84%</td>
+                <td>20 + 1000</td>
+            </tr>
+            <tr>
+                <td>OrderProcessor</td>
+                <td>84%</td>
+                <td>83%</td>
+                <td>8</td>
+            </tr>
+            <tr>
+                <td><strong>TOTAL</strong></td>
+                <td><strong>72%</strong></td>
+                <td><strong>77%</strong></td>
+                <td><strong>61 tests</strong></td>
+            </tr>
+        </table>
+
+        <hr>
+
+        <h2>Key Lessons Learned</h2>
+
+        <h3>1. Test Hierarchy</h3>
+        <ul>
+            <li><strong>Specification tests (Task 1):</strong> What <em>should</em> the code do?</li>
+            <li><strong>Structural tests (Task 2):</strong> Does every code path execute?</li>
+            <li><strong>Contract tests (Task 3):</strong> Are conditions and invariants maintained?</li>
+            <li><strong>Property tests (Task 4):</strong> Do universal properties hold across random inputs?</li>
+            <li><strong>Mock tests (Task 5):</strong> Do external service interactions follow the contract?</li>
+        </ul>
+
+        <h3>2. Floating-Point Precision</h3>
+        <p>Tests revealed that <code>99.99 * 0.67 * 1.07 = 71.682831</code>, not 72.0. Solution: Use round numbers or
+            <code>assertThat(value).isCloseTo(expected, offset(0.01))</code>.</p>
+
+        <h3>3. Property-Based Testing Assumptions</h3>
+        <p>The <code>cartCommutativityProperty</code> initially failed because the generator created products with
+            identical IDs but different prices. Solution: Add
+            <code>Assume.that(!product1.getId().equals(product2.getId()))</code> to filter meaningless cases.</p>
+
+        <h3>4. Design by Contract Trade-offs</h3>
+        <p>Assertions in production code catch bugs early but:</p>
+        <ul>
+            <li>Can be disabled with <code>-da</code> flag (bad for critical code)</li>
+            <li>Should not validate user input (use exceptions instead)</li>
+            <li>Require careful documentation</li>
+        </ul>
+
+        <h3>5. Mock Verification ≠ Behavior Testing</h3>
+        <p><code>verify(paymentGateway).charge("customer", 100)</code> confirms the method was called, but doesn't
+            verify outcomes. Mocks verify <em>interactions</em>, not <em>results</em>. Need integration tests for
+            outcomes.</p>
+
+        <hr>
+
+        <h2>Evolution of Testing Mindset</h2>
+
+        <table>
+            <tr>
+                <th>Phase</th>
+                <th>Perspective</th>
+                <th>Limitation</th>
+            </tr>
+            <tr>
+                <td>Task 1</td>
+                <td>Write test cases for expected behavior</td>
+                <td>Only covers happy paths</td>
+            </tr>
+            <tr>
+                <td>Task 2</td>
+                <td>Cover every branch</td>
+                <td>Doesn't ensure branches are tested</td>
+            </tr>
+            <tr>
+                <td>Task 3</td>
+                <td>Enforce invariants with assertions</td>
+                <td>Doesn't test error scenarios</td>
+            </tr>
+            <tr>
+                <td>Task 4</td>
+                <td>Find bugs with random inputs</td>
+                <td>Doesn't catch environmental issues</td>
+            </tr>
+            <tr>
+                <td>Task 5</td>
+                <td>Verify external interactions</td>
+                <td>Doesn't verify real integration works</td>
+            </tr>
+        </table>
+
+        <p><strong>Conclusion:</strong> No single testing technique is sufficient. A robust suite requires all five
+            layers.</p>
+
+        <hr>
+
+        <h2>Recommendations for Production</h2>
+
+        <h3>Immediate Actions</h3>
+        <ol>
+            <li>Add integration tests with real in-memory database (H2) and mocked payment service</li>
+            <li>Add performance tests to ensure no N+1 query problems</li>
+            <li>Document assertions in user documentation</li>
+        </ol>
+
+        <h3>Long-Term Improvements</h3>
+        <ol>
+            <li>Set up CI/CD pipeline to run all tests on every commit</li>
+            <li>Establish coverage thresholds (no merge if coverage drops below 70%)</li>
+            <li>Add contract testing (e.g., Pact) to verify mock assumptions</li>
+            <li>Implement chaos testing: inject random failures into production environments</li>
+        </ol>
+
+        <hr>
+
+        <h2>Final Reflection</h2>
+
+        <h3>The Question: "How do I know my code works?"</h3>
+
+        <p><strong>Before this project:</strong> Run the code manually, hope it works, debug in production.</p>
+
+        <p><strong>After completing Tasks 1-5:</strong></p>
+        <ul>
+            <li>✓ <strong>Specification tests</strong> verify the contract (what we promised)</li>
+            <li>✓ <strong>Structural tests</strong> verify the implementation (every path is tested)</li>
+            <li>✓ <strong>Contract tests</strong> verify invariants hold</li>
+            <li>✓ <strong>Property tests</strong> verify universality (all inputs work)</li>
+            <li>✓ <strong>Mock tests</strong> verify interactions (no payment on inventory failure)</li>
+            <li>✓ <strong>Coverage reports</strong> provide objective metrics (72% executed)</li>
+        </ul>
+
+        <div class="stats-box">
+            Combined: <strong>High confidence</strong> that ShopEasy works correctly under normal conditions and known
+            failure modes.
+        </div>
+
+        <div class="footer">
+            <p>Report Date: May 16, 2026<br>
+                Project: ShopEasy Testing Suite<br>
+                Total Tests: 61 + 3000 (property-based) = 3061<br>
+                Pass Rate: 100%<br>
+                Coverage: 72% instructions, 77% branches</p>
+        </div>
+
+    </div>
+</body>
+
+</html>
